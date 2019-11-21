@@ -1,0 +1,37 @@
+<% include partials/header %>
+
+<div class="col">
+    <div class="cards">
+        <div class="card-body">
+            <h5 class="card-title">Add Expense</h5>
+            <h6 class="card-sub-title mb-2 text-muted">Add a new expense here!</h6>
+            <p class="card-text">This section will help you add all your expensese!</p>
+            <a href="/expense/new" class="btn btn-primary btn-xs">Add Expense</a>
+        </div>
+    </div>
+</div>
+<% if(typeof currentUser !== 'undefined' && currentUser.isAdmin){%>
+<div class="col">
+    <div class="cards">
+        <div class="card-body">
+            <h5 class="card-title">Add Category</h5>
+            <h6 class="card-sub-title mb-2 text-muted">Add a new Category here!</h6>
+            <p class="card-text">This section will help you add the categories attached to your expenses</p>
+            <a href="/category/new" class="btn btn-primary btn-xs">Add Cagtegory</a>
+        </div>
+    </div>
+</div>
+<div class="col">
+    <div class="cards">
+        <div class="card-body">
+            <h5 class="card-title">Add User</h5>
+            <h6 class="card-sub-title mb-2 text-muted">Add a new User here!</h6>
+            <p class="card-text">This section will help you add a new user to the store</p>
+            <a href="/user/new" class="btn btn-primary btn-xs">Add User</a>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<% include partials/footer %>
+                            

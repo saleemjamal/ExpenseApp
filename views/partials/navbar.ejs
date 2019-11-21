@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <!-- Brand -->
+    <a class="navbar-brand" href="/landing">PJ Expense Manager</a>
+    
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    
+    
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse justify-right" id="collapsibleNavbar">
+        <ul class="navbar-nav ml-auto">
+            <% if(typeof currentUser == 'undefined'){ %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+            <% } else { %>
+                <li class="nav-item">
+                    <form action="/expense" class="form-inline">
+                        <input type="text" name="search" class="form-control mx-2" placeholder="Search Expenses...">
+                        <input type="submit" Value="Search" class="btn btn-primary btn-sm">
+                    </form>
+                </li>
+                <li class="nav-item px-5">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            <% } %>
+            </ul>
+    </div>
+</nav> 
+

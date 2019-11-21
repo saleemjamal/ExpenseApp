@@ -1,0 +1,32 @@
+<% include ../partials/header %>
+
+<div class="col">
+    <h1 style="text-align: center;"> Create a new Expense</h1>
+    <div style="width:30%; margin:25px auto">
+        <form action="/expense" method="POST">
+            <div class="form-group">
+                <select class="form-control" name="expense[category]">
+                    <option value="-"><small>--Choose an Option!--</small></option>
+                    <% categorys.forEach((category)=>{ %>
+                        <option value="<%= category.name %>"><%= category.name %></option>
+                    <% }) %>
+                </select>
+            </div>   
+            <div class="form-group">
+                    <input class="form-control" type="text" name="expense[narration]" placeholder="Narration">
+            </div>   
+            <div class="form-group">
+                <input class="form-control" type="number" name="expense[amount]" placeholder="Enter amount" step="1">
+            </div> 
+            <div class="form-group">
+                <input class="form-control" type="text" name="expense[owner]" placeholder="Owner">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="expense[vendor]" placeholder="Vendor">
+            </div>   
+            <div class="form-group">
+                <button class="btn btn-lg btn-default btn-block btn-primary">Submit</button>
+            </div>    
+        </form>
+        <a href="/landing">Back</a>                            
+</div>

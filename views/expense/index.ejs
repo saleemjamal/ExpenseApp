@@ -1,0 +1,27 @@
+<% include ../partials/header %>
+    
+<div class="col">
+    <!-- Enter Category list here!  -->
+    <div class="list-group">
+        <% expenses.forEach ((expense)=>{ %>
+            <li class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= expense.narration %></h5>
+                    <small>Rs.<%= expense.amount %></small>
+                </div>
+                <p class="mb-1">Owner:<%= expense.owner %></p>
+                <p class="mb-1">Vendor:<%= expense.vendor %></p>
+                <p class="mb-1">Category:<%= expense.category.name %></p>
+                <% if (typeof currentUser !== 'undefined' && expense.author.id.equals(currentUser._id) || typeof currentUser!=='undefined'  && currentUser.isAdmin) { %>
+                    <a href="/expense/<%= expense.id %>/edit" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="/expense/<%= expense.id %>?_method=DELETE" method="POST" class="delete-form">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                <% } %>        
+            </li>
+        <% }); %>
+        </div>
+</div>    
+
+<% include ../partials/footer %>
+                        

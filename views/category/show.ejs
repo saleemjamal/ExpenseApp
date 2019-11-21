@@ -1,0 +1,21 @@
+<% include ../partials/header %>
+
+<div class="col">
+    <strong><%= category.name %></strong>
+    <% if(typeof currentUser !== 'undefined' && currentUser.isAdmin){ %>    
+        <a href="/category/<%= category._id %>/edit" class="btn btn-warning btn-sm ml-0">Edit</a>
+        <form class="delete-form" action="/category/<%= category._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger btn-sm ml-0">Delete</button>
+        </form>
+    <% } %>
+    </h6>
+    <ul class="list-group list-group-flush">
+    <% category.expenses.forEach((expense)=>{ %>
+        <li class="list-group-item">
+            <%= expense.narration %>
+        </li>
+    <% }) %>
+    </ul>          
+</div>
+
+<% include ../partials/footer %>
