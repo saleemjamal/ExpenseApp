@@ -2,6 +2,56 @@
     
 <div class="col">
     <!-- Enter Category list here!  -->
+    <div class="form-check-inline">
+        <form name="filterForm" action="/expense" method="GET">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input"  name="approvedRadio" value="All"  >All
+            </label>
+            </div>
+            <div class="form-check-inline">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input"  name="approvedRadio" value="Approved" >Approved
+            </label>
+            </div>
+            <div class="form-check-inline disabled">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input"  name="approvedRadio" value="Pending" >Pending
+            </label>
+        </form>
+    </div> 
+    <script>
+    
+    // DEFAULT BUTTONS NOT WORKING -> CAN CONVERT LOCAL STORAGE TO SESSION STORAGE
+
+    (function(){
+        window.addEventListener('load',function(){
+            var rbuttons = document.querySelectorAll(".form-check-input");
+            rbuttons.forEach(radio=>{
+                // alert(localStorage["selectedRadio"]);
+                if(radio.value===localStorage.selectedRadio){
+                    radio.checked=true;
+                }else{
+                    radio.checked=false;
+                }
+            });
+            for(var i=0;i<rbuttons.length;i++){
+                // alert("In For Loop!")
+                rbuttons[i].addEventListener("click",function(event){
+                    if(this.checked){
+                        localStorage.selectedRadio = this.value;
+                    } 
+                    this.form.submit();
+                });
+            }
+        });
+    })();
+
+    // window.onbeforeunload = function(){
+    //     localStorage.removeItem("selectedRadio");
+    //     // return '';
+    // }
+
+    </script>
     <div class="list-group">
         <% expenses.forEach ((expense)=>{ %>
             <li class="list-group-item list-group-item-action flex-column align-items-start">

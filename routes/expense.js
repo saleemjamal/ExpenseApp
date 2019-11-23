@@ -7,23 +7,54 @@ const   express             = require("express"),
         Category            = require("../models/category");
     
 
-// TO DO: CREATE EXPENSE ROUTES WITH CATEGORY PREFIX!
-// EG. /EXPENSE SHOULD BECOME /CATEGORY/:ID/EXPENSE, ETC. 
-
 // INDEX ROUTE
 router.get("/expense",middleware.isLoggedIn,function (req,res) {
+  var isApproved = false;
+  console.log(req.query.approvedRadio)
+  const searchQuery = typeof req.query.search === "undefined"? "": req.query.search;
+  const status = typeof req.query.approvedRadio ==="undefined" ? "":req.query.approvedRadio;
+  const query= new Expense();
+
   if(typeof req.query.search !== 'undefined'){
     const regex = new RegExp(escapeRegex(req.query.search),'gi')
-    Expense.find({narration:regex},function(err,allExpenses){
-      if(err){console.log(err.message)}
-      else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
-    });
+    if(typeof req.query.approvedRadio === 'undefined' || req.query.approvedRadio === "All")
+    { 
+      Expense.find({narration:regex},function(err,allExpenses){
+        if(err){console.log(err.message)}
+        else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
+      });
+    } else if(req.query.approvedRadio==="Approved"){
+        isApproved=true;
+        Expense.find({narration:regex,isApproved:isApproved},function(err,allExpenses){
+          if(err){console.log(err.message)}
+          else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
+        });
+    } else{
+      Expense.find({narration:regex,isApproved:isApproved},function(err,allExpenses){
+        if(err){console.log(err.message)}
+        else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
+      });
+    }
   }
   else{
-    Expense.find({},function(err,allExpenses){
-      if(err){console.log(err.message)}
-      else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
-    })
+    if(typeof req.query.approvedRadio === 'undefined' || req.query.approvedRadio === "All")
+    { 
+      Expense.find({isApproved:isApproved},function(err,allExpenses){
+        if(err){console.log(err.message)}
+        else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
+      });
+    } else if(req.query.approvedRadio==="Approved"){
+        isApproved=true;
+        Expense.find({isApproved:isApproved},function(err,allExpenses){
+          if(err){console.log(err.message)}
+          else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
+        });
+    } else{
+      Expense.find({isApproved:isApproved},function(err,allExpenses){
+        if(err){console.log(err.message)}
+        else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
+      });
+    }
   }});
 
 // NEW ROUTE

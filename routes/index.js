@@ -55,6 +55,7 @@ router.get("/landing",middleware.isLoggedIn,function(req,res){res.render("landin
 
 router.get("/logout", middleware.isLoggedIn, function(req, res){
     req.logout();
+    // localStorage.removeItem("selectedRadio");
     res.redirect("/login");
  });
  
