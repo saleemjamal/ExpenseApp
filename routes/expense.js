@@ -11,10 +11,9 @@ const   express             = require("express"),
 router.get("/expense",middleware.isLoggedIn,function (req,res) {
   var isApproved = false;
   console.log(req.query.approvedRadio)
-  const searchQuery = typeof req.query.search === "undefined"? "": req.query.search;
-  const status = typeof req.query.approvedRadio ==="undefined" ? "":req.query.approvedRadio;
-  const query= new Expense();
-
+  const searchQuery = req.query.search;
+  const status = req.query.approvedRadio;
+  
   if(typeof req.query.search !== 'undefined'){
     const regex = new RegExp(escapeRegex(req.query.search),'gi')
     if(typeof req.query.approvedRadio === 'undefined' || req.query.approvedRadio === "All")
@@ -39,7 +38,7 @@ router.get("/expense",middleware.isLoggedIn,function (req,res) {
   else{
     if(typeof req.query.approvedRadio === 'undefined' || req.query.approvedRadio === "All")
     { 
-      Expense.find({isApproved:isApproved},function(err,allExpenses){
+      Expense.find(function(err,allExpenses){
         if(err){console.log(err.message)}
         else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
       });

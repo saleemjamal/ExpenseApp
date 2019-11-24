@@ -12,7 +12,8 @@ const   express                 = require("express"),
 
 const   authRoutes              = require("./routes/index"),
         categoryRoutes          = require("./routes/category"),
-        expenseRoutes           = require("./routes/expense");
+        expenseRoutes           = require("./routes/expense"),
+        approvalRoutes          = require("./routes/approval");
         
 mongoose.connect("mongodb://localhost/expenseappdb",{useNewUrlParser:true,useUnifiedTopology:true})
 .then(()=>console.log("DB Connected"))
@@ -42,6 +43,7 @@ app.use((req,res,next)=>{
 app.use(authRoutes);
 app.use(categoryRoutes);
 app.use(expenseRoutes);
+app.use(approvalRoutes);
 
 app.listen(3000,()=>{
     console.log("Expense App Server Listening!")
