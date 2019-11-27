@@ -1,23 +1,26 @@
 <% include ../partials/header %>
 
-
-<div class="list-group">
-    <% expenses.forEach ((expense)=>{ %>
-        <li class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1"><%= expense.narration %></h5>
-                <small>Rs.<%= expense.amount %></small>
-            </div>
-            <p class="mb-1">Owner:<%= expense.owner %></p>
-            <p class="mb-1">Vendor:<%= expense.vendor %></p>
-            <p class="mb-1">Category:<%= expense.category.name %></p>
-            <% if (typeof currentUser!=='undefined'  && currentUser.isAdmin) { %>
-                <form action="/approval/<%= expense.id %>?_method=PUT" method="POST">    
-                    <button class="btn btn-warning btn-sm">Approve</button>
-                </form>
-            <% } %>        
-        </li>
-    <% }); %>
-</div>
+<% if(typeof expenses !== 'undefined' && expenses.length>0) { %>
+    <div class="list-group">
+        <% expenses.forEach ((expense)=>{ %>
+            <li class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= expense.narration %></h5>
+                    <small>Rs.<%= expense.amount %></small>
+                </div>
+                <p class="mb-1">Owner:<%= expense.owner %></p>
+                <p class="mb-1">Vendor:<%= expense.vendor %></p>
+                <p class="mb-1">Category:<%= expense.category.name %></p>
+                <% if (typeof currentUser!=='undefined'  && currentUser.isAdmin) { %>
+                    <form action="/approval/<%= expense.id %>?_method=PUT" method="POST">    
+                        <button class="btn btn-warning btn-sm">Approve</button>
+                    </form>
+                <% } %>        
+            </li>
+        <% }); %>
+    </div>
+<% } else { %>
+    <h3 class="mt-4"> No more expenses pending approval!</h3>
+<% } %>
 
 <% include ../partials/footer %>

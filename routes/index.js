@@ -5,7 +5,7 @@ const   express             = require("express"),
         middleware          = require("../middleware")
    
 router.get("/",function(req,res){
-    res.render("login")
+    res.render("login");
 });
 // INDEX ROUTE
 router.get("/login",function(req,res){
@@ -16,7 +16,9 @@ router.get("/login",function(req,res){
 router.post("/login", passport.authenticate("local", 
     {
         successRedirect: "/landing",
-        failureRedirect: "/login"
+        failureRedirect: "/login",
+        failureFlash:true,
+        successFlash:"Welcome to Expense App!"
     }), function(req, res){
 });
 
@@ -37,17 +39,18 @@ router.post("/register",function(req,res){
         {
             if(err)
             {
-                console.log(err.message);
+                req.flash("error",err.message)
                 res.render("register");
             }
             else{
                 passport.authenticate("local")(req,res,function(){
+                    req.flash("success","You have successfully registered "+req.user.username+"!")
                     res.redirect("/landing");
                 })
             }
         })
     } catch(err){
-        console.log(err.message);
+        req.flash("error",err.message);
     }
 })
 
@@ -55,7 +58,7 @@ router.get("/landing",middleware.isLoggedIn,function(req,res){res.render("landin
 
 router.get("/logout", middleware.isLoggedIn, function(req, res){
     req.logout();
-    // localStorage.removeItem("selectedRadio");
+    req.flash("success","You have logged out!")
     res.redirect("/login");
  });
  

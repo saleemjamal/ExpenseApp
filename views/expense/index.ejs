@@ -5,46 +5,49 @@
     <div class="form-check-inline">
         <form name="filterForm" action="/expense" method="GET">
             <label class="form-check-label">
-                <input type="radio" class="form-check-input"  name="approvedRadio" value="All"  >All
+                <input type="radio" class="form-check-input"  name="approvedRadio" value="All" onclick=this.form.submit() >All
             </label>
             </div>
             <div class="form-check-inline">
             <label class="form-check-label">
-                <input type="radio" class="form-check-input"  name="approvedRadio" value="Approved" >Approved
+                <input type="radio" class="form-check-input"  name="approvedRadio" value="Approved" onclick=this.form.submit() >Approved
             </label>
             </div>
             <div class="form-check-inline disabled">
             <label class="form-check-label">
-                <input type="radio" class="form-check-input"  name="approvedRadio" value="Pending" >Pending
+                <input type="radio" class="form-check-input"  name="approvedRadio" value="Pending" onclick= this.form.submit() >Pending
             </label>
         </form>
     </div> 
+    <div class="form-check-inline float-right">
+        <a href="/expense/new" class="btn btn-link btn-xs">Add Expense</a>
+    </div>
     <script>
     
     // DEFAULT BUTTONS NOT WORKING -> CAN CONVERT LOCAL STORAGE TO SESSION STORAGE
 
-    (function(){
-        window.addEventListener('load',function(){
-            var rbuttons = document.querySelectorAll(".form-check-input");
-            rbuttons.forEach(radio=>{
-                // alert(localStorage["selectedRadio"]);
-                if(radio.value===localStorage.selectedRadio){
-                    radio.checked=true;
-                }else{
-                    radio.checked=false;
-                }
-            });
-            for(var i=0;i<rbuttons.length;i++){
-                // alert("In For Loop!")
-                rbuttons[i].addEventListener("click",function(event){
-                    if(this.checked){
-                        localStorage.selectedRadio = this.value;
-                    } 
-                    this.form.submit();
-                });
-            }
-        });
-    })();
+    // (function(){
+    //     window.addEventListener('load',function(){
+    //         var rbuttons = document.querySelectorAll(".form-check-input");
+    //         rbuttons.forEach(radio=>{
+    //             // alert(localStorage["selectedRadio"]);
+    //             if(radio.value===localStorage.selectedRadio){
+    //                 radio.checked=true;
+    //             }else{
+    //                 radio.checked=false;
+    //             }
+    //         });
+    //         for(var i=0;i<rbuttons.length;i++){
+    //             // alert("In For Loop!")
+    //             rbuttons[i].addEventListener("click",function(event){
+    //                 if(this.checked){
+    //                     localStorage.selectedRadio = this.value;
+    //                 } 
+    //                 this.form.submit();
+    //             });
+    //         }
+    //     });
+    // })();
 
     // window.onbeforeunload = function(){
     //     localStorage.removeItem("selectedRadio");
@@ -52,7 +55,8 @@
     // }
 
     </script>
-    <div class="list-group">
+    <% if(typeof expenses !== 'undefined' && expenses.length>0) { %>
+    <div class="list-group m-3">
         <% expenses.forEach ((expense)=>{ %>
             <li class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
@@ -75,8 +79,11 @@
                 
             </li>
         <% }); %>
-        </div>
-</div>    
+        </div> 
+    </div>    
+    <% } else { %>
+        <h3 class="mt-4"> No more expenses pending approval!</h3>
+    <% } %>
 
 <% include ../partials/footer %>
                         

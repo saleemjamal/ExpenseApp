@@ -10,6 +10,18 @@
 </head>
 <body>    
     <div class="container">
+         <% if(typeof error !== 'undefined' && error.length>0) { %>
+        <div class="alert alert-danger" role="alerts">
+            <%= error %>
+        </div>
+        <% } %>
+        <% if(typeof success !== 'undefined' && success.length>0) { %>
+        <div class="alert alert-success" role="alerts">
+            <%= success %>
+        </div>
+        <% }%>
+    </div> 
+    <div class="container">
         <div class="row text-center">
             <img src="images/PJ_Logo.jpg" height="100px">
         </div>

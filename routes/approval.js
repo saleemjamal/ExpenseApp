@@ -12,14 +12,14 @@ router.get("/approval",middleware.isLoggedIn,middleware.checkUserAdmin,function(
     if(typeof searchQuery === 'undefined')
     {
         Expense.find({isApproved:false},function(err,pendingExpense){
-            if(err){console.log(err)}
+            if(err){req.flash("error",err.message);}
             else{res.render("approval/index",{expenses:pendingExpense,currentUser:req.user});}
         });
     }
     else{
         const regex = new RegExp(escapeRegex(req.query.search),'gi')
         Expense.find({narration:regex,isApproved:false},function(err,pendingExpense){
-            if(err){console.log(err.message)}
+            if(err){req.flash("error",err.message);}
             else{res.render("approval/index",{expenses:pendingExpense,currentUser:req.user})}
         });
     }
@@ -28,8 +28,9 @@ router.get("/approval",middleware.isLoggedIn,middleware.checkUserAdmin,function(
 // UPDATE ROUTE
 router.put("/approval/:id",middleware.isLoggedIn,middleware.checkUserExpense,function(req,res){
     Expense.findByIdAndUpdate(req.params.id,{isApproved:true},function(err,updatedExpense){
-      if(err){console.log(err.message)}
+      if(err){req.flash("error",err.message);}
       else{
+        req.flash("success","Expense Update successfull!")
         res.redirect("/approval")
       }
     })

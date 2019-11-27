@@ -19,18 +19,18 @@ router.get("/expense",middleware.isLoggedIn,function (req,res) {
     if(typeof req.query.approvedRadio === 'undefined' || req.query.approvedRadio === "All")
     { 
       Expense.find({narration:regex},function(err,allExpenses){
-        if(err){console.log(err.message)}
+        if(err){req.flash("error",err.message);}
         else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
       });
     } else if(req.query.approvedRadio==="Approved"){
         isApproved=true;
         Expense.find({narration:regex,isApproved:isApproved},function(err,allExpenses){
-          if(err){console.log(err.message)}
+          if(err){req.flash("error",err.message);}
           else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
         });
     } else{
       Expense.find({narration:regex,isApproved:isApproved},function(err,allExpenses){
-        if(err){console.log(err.message)}
+        if(err){req.flash("error",err.message);}
         else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
       });
     }
@@ -39,18 +39,18 @@ router.get("/expense",middleware.isLoggedIn,function (req,res) {
     if(typeof req.query.approvedRadio === 'undefined' || req.query.approvedRadio === "All")
     { 
       Expense.find(function(err,allExpenses){
-        if(err){console.log(err.message)}
+        if(err){req.flash("error",err.message);}
         else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
       });
     } else if(req.query.approvedRadio==="Approved"){
         isApproved=true;
         Expense.find({isApproved:isApproved},function(err,allExpenses){
-          if(err){console.log(err.message)}
+          if(err){req.flash("error",err.message);}
           else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
         });
     } else{
       Expense.find({isApproved:isApproved},function(err,allExpenses){
-        if(err){console.log(err.message)}
+        if(err){req.flash("error",err.message);}
         else{res.render("expense/index",{expenses:allExpenses,currentUser:req.user})}
       });
     }
@@ -59,7 +59,7 @@ router.get("/expense",middleware.isLoggedIn,function (req,res) {
 // NEW ROUTE
 router.get("/expense/new",middleware.isLoggedIn,function(req,res){
   Category.find({},function(err,categorys){
-    if(err){console.log(err.message)}
+    if(err){req.flash("error",err.message);}
     else{
       res.render("expense/new",{categorys:categorys})
     }
@@ -70,7 +70,7 @@ router.get("/expense/new",middleware.isLoggedIn,function(req,res){
 router.post("/expense",middleware.isLoggedIn,function(req,res){
   // Finding a category to attach to
   Category.findOne({name:req.body.expense.category},function(err,foundCategory){
-    if(err){console.log(err.message)}
+    if(err){req.flash("error",err.message);}
     else{
         // Creating the expense
         const narration = req.body.expense.narration,
@@ -87,10 +87,11 @@ router.post("/expense",middleware.isLoggedIn,function(req,res){
               };
         const newExpense = {narration:narration,amount:amount,owner:owner,vendor:vendor,author:author,category:category};
         Expense.create(newExpense,function(err,createdExpense){
-        if(err){console.log("Here"+err.message)}
+        if(err){req.flash("error",err.message);}
         else{
           foundCategory.expenses.push(createdExpense);
           foundCategory.save();
+          req.flash("success","Expense has been successfully created!")
           res.redirect("/expense");
         }
       });
@@ -101,10 +102,10 @@ router.post("/expense",middleware.isLoggedIn,function(req,res){
 // EDIT ROUTE
 router.get("/expense/:id/edit",middleware.isLoggedIn,function(req,res){
   Category.find({},function(err,categorys){
-    if(err){console.log(err.message)}
+    if(err){req.flash("error",err.message);}
     else{
     Expense.findById(req.params.id,function(err,editExpense){
-      if(err){console.log(err.message)}
+      if(err){req.flash("error",err.message);}
       else{
         res.render("expense/edit",{expense:editExpense,categorys:categorys})}
     });
@@ -114,8 +115,9 @@ router.get("/expense/:id/edit",middleware.isLoggedIn,function(req,res){
 // UPDATE ROUTE
 router.put("/expense/:id",middleware.isLoggedIn,middleware.checkUserExpense,function(req,res){
   Expense.findByIdAndUpdate(req.params.id,req.body.expense,function(err,updatedExpense){
-    if(err){console.log(err.message)}
+    if(err){req.flash("error",err.message);}
     else{
+      req.flash("success","Edited expense has been successfully updated!")
       res.redirect("/expense")
     }
   })
@@ -125,8 +127,9 @@ router.put("/expense/:id",middleware.isLoggedIn,middleware.checkUserExpense,func
 // DELETE ROUTES
 router.delete("/expense/:id",middleware.isLoggedIn,middleware.checkUserExpense,function(req,res){
   Expense.findByIdAndRemove(req.params.id,function(err){
-    if(err){console.log(err.message)}
+    if(err){req.flash("error",err.message);}
     else{
+      req.flash("success","Expense has been successfully deleted!")
       res.redirect("/expense");
     }
   })
