@@ -136,6 +136,27 @@ router.delete("/expense/:id",middleware.isLoggedIn,middleware.checkUserExpense,f
 });
 module.exports = router;
 
+router.get("/autocomplete/",function(req,res,next){
+  const regex = new RegExp(req.query["term"],'i');
+  const expenseFilter = Expense.find({narration:regex},{'narration':1}).limit(3);
+  expenseFilter.exec(function(err,data){
+    var result = [];
+    if(!err){
+      if(data && data.length && data.length>0)
+      {
+        data.forEach(expense=>{
+          let obj = {
+            id:expense._id,
+            label: expense.narration
+          };
+          result.push(obj)
+        });
+      }
+    }
+    res.jsonp(result);
+    })
+});
+
 
 function escapeRegex (text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");

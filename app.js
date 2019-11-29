@@ -8,8 +8,8 @@ const   express                 = require("express"),
         LocalStrategy           = require("passport-local"),
         methodOverride          = require("method-override"),
         flash                   = require("connect-flash"),
-        category                = require("./models/category");
-
+        Category                = require("./models/category");
+        
 const   authRoutes              = require("./routes/index"),
         categoryRoutes          = require("./routes/category"),
         expenseRoutes           = require("./routes/expense"),
@@ -20,7 +20,7 @@ mongoose.connect("mongodb://localhost/expenseappdb",{useNewUrlParser:true,useUni
 .catch(err=>{console.log(err.message)});
 
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static(__dirname+"/public"));
+app.use(express.static(__dirname+"/public/"));
 app.set("view engine","ejs");
 app.use(methodOverride("_method"));
 app.use(require("express-session")({
@@ -31,6 +31,7 @@ app.use(require("express-session")({
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
